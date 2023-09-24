@@ -1,5 +1,7 @@
 # summaizer
 
+Don't you just hate spending the last couple of minutes of your Friday to summarize the work you've done this week? Well, I do. So I made this script to do it for me.
+
 This script summarizes the contents of a "done" list of tasks in a given Trello board, with Open AI.
 
 ## How to use
@@ -43,3 +45,11 @@ Finally, run the script with
 ```bash
 bun start
 ```
+
+## It doesn't fit my format
+
+That's fine – just change the `primer` in the `index.ts` file to fit your needs.
+
+## Questions?
+
+Do you love it? Hate it? Have some suggestions to improve it? Let me know in either the issues or on [x/twitter](https://x.com/selbekk).
