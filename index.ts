@@ -14,6 +14,7 @@ const PRIVATE_TRELLO_API_TOKEN = process.env.PRIVATE_TRELLO_API_TOKEN;
 const PRIVATE_OPEN_AI_API_KEY = process.env.PRIVATE_OPEN_AI_API_KEY;
 const BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE =
   process.env.BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE;
+const SUMMARY_HEADING = process.env.SUMMARY_HEADING;
 
 if (!PUBLIC_TRELLO_BOARD_ID) {
   console.error("PUBLIC_TRELLO_BOARD_ID not set");
@@ -33,6 +34,10 @@ if (!PRIVATE_OPEN_AI_API_KEY) {
 }
 if (!BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE) {
   console.error("BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE not set");
+  process.exit(-1);
+}
+if (!SUMMARY_HEADING) {
+  console.error("SUMMARY_HEADING not set");
   process.exit(-1);
 }
 
@@ -79,20 +84,17 @@ const openai = new OpenAI({
 });
 
 const primer = `
-Gitt en liste med oppgaver og milepæler fra uken, skriv en kort og presis 
-Slack-oppsummering. Start teksten med "Team insane, uke 38 :team-insane-icon:" i fet skrift. 
+Given a list of tasks and milestones from the week, write a short and precise Slack summary. Start the text with "${SUMMARY_HEADING}" in bold.
 
-Dernest lag en oppsummering av alt som ble gjort, med overskriften "📜 TL;DR:" i fet skrift.
-Oppsummeringen skal være på maks 300 tegn.
-Dernest list opp en oppsummering av de viktigste oppgavene. Ha maks 7 punkter i listen, uten tall foran.
-Bruk relevante emojis foran hver oppsummering.
-Hver av oppsummeringene skal være på én linje, og skal kun være én setning lang.
-Ikke inkluder lenker.
-Tonen skal være profesjonell, men med en positiv vri.
-Skriv på norsk (bokmål), og dobbeltsjekk at alt av grammatikk er riktig.
-Bruk enkelt-stjerne for å markere fet skrift.
+Next, create a summary of everything that was done, with the headline "📜 TL;DR:" in bold. The summary should be a maximum of 300 characters.
 
-Ikke avslutt teksten med oppsummeringer.`;
+Then list a summary of the most important tasks. Have a maximum of 7 points in the list, without numbers in front. Use relevant emojis before each summary. Each of the summaries should be on one line and should only be one sentence long. Do not include links.
+
+The tone should be professional, but with a positive twist.
+Write in Norwegian (bokmål), and double-check that all grammar is correct.
+Use a single asterisk to mark bold text.
+
+Do not end the text with summaries.`;
 
 const prompt = `${primer}\n\n${summarizableData}`;
 
