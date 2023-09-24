@@ -32,14 +32,14 @@ Next, you need to make sure you have bun installed. You can read up on how [here
 curl -fsSL https://bun.sh/install | bash
 ```
 
-To install dependencies:
+Next, install dependencies.
 
 ```bash
 bun install
 ```
 
-To run:
+Finally, run the script with
 
 ```bash
-bun run index.ts
+bun start
 ```
