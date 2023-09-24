@@ -8,42 +8,30 @@ import OpenAI from "openai";
  * Feel free to open a pull request if you have any suggestions for improvements.
  */
 
-const PUBLIC_TRELLO_BOARD_ID = process.env.PUBLIC_TRELLO_BOARD_ID;
-const PUBLIC_TRELLO_API_KEY = process.env.PUBLIC_TRELLO_API_KEY;
-const PRIVATE_TRELLO_API_TOKEN = process.env.PRIVATE_TRELLO_API_TOKEN;
-const PRIVATE_OPEN_AI_API_KEY = process.env.PRIVATE_OPEN_AI_API_KEY;
-const BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE =
-  process.env.BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE;
-const SUMMARY_HEADING = process.env.SUMMARY_HEADING;
-const SUMMARY_LANGUAGE = process.env.SUMMARY_LANGUAGE;
+const {
+  PUBLIC_TRELLO_BOARD_ID = "",
+  PUBLIC_TRELLO_API_KEY = "",
+  PRIVATE_TRELLO_API_TOKEN = "",
+  PRIVATE_OPEN_AI_API_KEY = "",
+  BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE = "",
+  SUMMARY_HEADING = "",
+  SUMMARY_LANGUAGE = "",
+} = process.env;
 
-if (!PUBLIC_TRELLO_BOARD_ID) {
-  console.error("PUBLIC_TRELLO_BOARD_ID not set");
-  process.exit(-1);
-}
-if (!PUBLIC_TRELLO_API_KEY) {
-  console.error("PUBLIC_TRELLO_API_KEY not set");
-  process.exit(-1);
-}
-if (!PRIVATE_TRELLO_API_TOKEN) {
-  console.error("PRIVATE_TRELLO_API_TOKEN not set");
-  process.exit(-1);
-}
-if (!PRIVATE_OPEN_AI_API_KEY) {
-  console.error("PRIVATE_OPEN_AI_API_KEY not set");
-  process.exit(-1);
-}
-if (!BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE) {
-  console.error("BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE not set");
-  process.exit(-1);
-}
-if (!SUMMARY_HEADING) {
-  console.error("SUMMARY_HEADING not set");
-  process.exit(-1);
-}
-if (!SUMMARY_LANGUAGE) {
-  console.error("SUMMARY_LANGUAGE not set");
-  process.exit(-1);
+const ENV_VARS = [
+  "PUBLIC_TRELLO_BOARD_ID",
+  "PUBLIC_TRELLO_API_KEY",
+  "PRIVATE_TRELLO_API_TOKEN",
+  "PRIVATE_OPEN_AI_API_KEY",
+  "BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE",
+  "SUMMARY_HEADING",
+  "SUMMARY_LANGUAGE",
+];
+for (let envVar in ENV_VARS) {
+  if (!envVar) {
+    console.error(`${envVar} not set`);
+    process.exit(-1);
+  }
 }
 
 const listsResponse = await fetch(
