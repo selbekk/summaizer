@@ -29,7 +29,7 @@ const ENV_VARS = [
 ];
 for (let envVar in ENV_VARS) {
   if (!envVar) {
-    console.error(`${envVar} not set`);
+    console.error(`🚫 ${envVar} not set`);
     process.exit(-1);
   }
 }
@@ -47,7 +47,7 @@ const theList = lists.find((list) =>
 
 if (!theList) {
   console.error(
-    `Fant ikke en liste som startet på "${BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE}" i det angitte boardet`
+    `🚫 Could not find a list that started with "${BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE}" in the given board`
   );
   process.exit(-1);
 }
@@ -58,10 +58,14 @@ const cardsResponse = await fetch(
 type CardJson = { name: string; desc: string };
 const cards: CardJson[] = await cardsResponse.json();
 
-console.info(`Fant ${cards.length ?? "ingen"} kort i listen ${theList?.name}.`);
+console.info(
+  `💰 Found ${cards.length ?? "no"} card${
+    cards.length === 1 ? "" : "s"
+  } in the list "${theList?.name}".`
+);
 
 if (cards.length === 0) {
-  console.warn("Ingen kort i listen, og derfor ingenting å oppsummere");
+  console.warn("🤷 No cards in the list, therefore nothing to summarize.");
   process.exit(0);
 }
 
@@ -77,25 +81,26 @@ const openai = new OpenAI({
 });
 
 const primer = `
-Given a list of tasks and milestones from the week, write a short and precise Slack summary. Start the text with "${SUMMARY_HEADING}" in bold.
+Given a list of tasks and milestones from the week, write a short and precise Slack summary. Start the text with "${SUMMARY_HEADING}" in bold. If the text "${theList.name}" includes a number, append the week number to the heading.
 
 Next, create a summary of everything that was done, with the headline "📜 TL;DR:" in bold. The summary should be a maximum of 300 characters.
 
-Then list a summary of the most important tasks. Have a maximum of 7 points in the list, without numbers in front. Use relevant emojis before each summary. Each of the summaries should be on one line and should only be one sentence long. Do not include links.
+Then list a summary of the most important tasks. Have a maximum of 7 points in the list, without numbers in front. Use a single relevant emoji before each summary. Each of the summaries should be one line and should only be one sentence long. Do not include links. Use a single newline to separate the points.
 
 The tone should be professional, but with a positive twist.
-Write in ${SUMMARY_LANGUAGE}, and double-check that all grammar is correct.
-Use a single asterisk to mark bold text.
+Output the text in the language ${SUMMARY_LANGUAGE}, and double-check that all grammar is correct and that the text reads well.
+Use a single * to mark bold text, not **.
+Do not include anything after the list of points.`;
 
-Do not end the text with summaries.`;
+const prompt = `${primer}\n---\n${summarizableData}`;
 
-const prompt = `${primer}\n\n${summarizableData}`;
-
-console.info("🤖 Spør OpenAI om å oppsummere. Dette kan ta noen sekunder…");
+console.info(
+  "🤖 Querying OpenAI to summarize the content. This will take 10-30 seconds…"
+);
 
 const chatCompletion = await openai.chat.completions.create({
   messages: [{ role: "user", content: prompt }],
   model: "gpt-4",
 });
-console.info("\n\n");
+console.info("✅ Summary ready!\n\n---\n");
 console.info(chatCompletion.choices[0].message.content);
