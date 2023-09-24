@@ -12,6 +12,8 @@ const PUBLIC_TRELLO_BOARD_ID = process.env.PUBLIC_TRELLO_BOARD_ID;
 const PUBLIC_TRELLO_API_KEY = process.env.PUBLIC_TRELLO_API_KEY;
 const PRIVATE_TRELLO_API_TOKEN = process.env.PRIVATE_TRELLO_API_TOKEN;
 const PRIVATE_OPEN_AI_API_KEY = process.env.PRIVATE_OPEN_AI_API_KEY;
+const BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE =
+  process.env.BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE;
 
 if (!PUBLIC_TRELLO_BOARD_ID) {
   console.error("PUBLIC_TRELLO_BOARD_ID not set");
@@ -29,6 +31,10 @@ if (!PRIVATE_OPEN_AI_API_KEY) {
   console.error("PRIVATE_OPEN_AI_API_KEY not set");
   process.exit(-1);
 }
+if (!BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE) {
+  console.error("BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE not set");
+  process.exit(-1);
+}
 
 const listsResponse = await fetch(
   `https://api.trello.com/1/boards/${PUBLIC_TRELLO_BOARD_ID}/lists?key=${PUBLIC_TRELLO_API_KEY}&token=${PRIVATE_TRELLO_API_TOKEN}`
@@ -36,12 +42,14 @@ const listsResponse = await fetch(
 type ListJson = { id: string; name: string };
 const lists: ListJson[] = await listsResponse.json();
 const theList = lists.find((list) =>
-  list.name.toLowerCase().startsWith("done")
+  list.name
+    .toLowerCase()
+    .startsWith(BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE.toLowerCase())
 );
 
 if (!theList) {
   console.error(
-    'Fant ikke en liste som startet på "Done" i det angitte boardet'
+    `Fant ikke en liste som startet på "${BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE}" i det angitte boardet`
   );
   process.exit(-1);
 }
