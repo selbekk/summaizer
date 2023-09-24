@@ -13,6 +13,7 @@ PRIVATE_TRELLO_API_TOKEN="your private trello api token"
 PRIVATE_OPEN_AI_API_KEY="your private open ai api key"
 BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE="the (beginning of the) name of the list you want summarized"
 SUMMARY_HEADING="the heading of the summary"
+SUMMARY_LANGUAGE="the language of the summary (e.g. en-US, nb-NO, Norwegian Bokmål)"
 ```
 
 You can also run this command to create the `.env` file with some sample content:

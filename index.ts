@@ -15,6 +15,7 @@ const PRIVATE_OPEN_AI_API_KEY = process.env.PRIVATE_OPEN_AI_API_KEY;
 const BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE =
   process.env.BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE;
 const SUMMARY_HEADING = process.env.SUMMARY_HEADING;
+const SUMMARY_LANGUAGE = process.env.SUMMARY_LANGUAGE;
 
 if (!PUBLIC_TRELLO_BOARD_ID) {
   console.error("PUBLIC_TRELLO_BOARD_ID not set");
@@ -38,6 +39,10 @@ if (!BEGINNING_OF_NAME_OF_LIST_TO_SUMMARIZE) {
 }
 if (!SUMMARY_HEADING) {
   console.error("SUMMARY_HEADING not set");
+  process.exit(-1);
+}
+if (!SUMMARY_LANGUAGE) {
+  console.error("SUMMARY_LANGUAGE not set");
   process.exit(-1);
 }
 
@@ -91,7 +96,7 @@ Next, create a summary of everything that was done, with the headline "📜 TL;D
 Then list a summary of the most important tasks. Have a maximum of 7 points in the list, without numbers in front. Use relevant emojis before each summary. Each of the summaries should be on one line and should only be one sentence long. Do not include links.
 
 The tone should be professional, but with a positive twist.
-Write in Norwegian (bokmål), and double-check that all grammar is correct.
+Write in ${SUMMARY_LANGUAGE}, and double-check that all grammar is correct.
 Use a single asterisk to mark bold text.
 
 Do not end the text with summaries.`;
